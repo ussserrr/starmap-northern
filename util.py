@@ -21,6 +21,7 @@ markers = { 'moon': 50,
             'planet': 20 }
 style = 'light'  # 'light', 'dark'
 plot_size = 4
+dpi = 120
 
 
 
@@ -122,7 +123,7 @@ def extract_forms(constellations_dict, stars_table):
 
 
 def prepare_skymap(fontsize=10):
-    fig = plt.figure(dpi=120)  # figsize=(14, 7)
+    fig = plt.figure(dpi=dpi)  # figsize=(14, 7)
     # add an axes at position [left, bottom, width, height] where all quantities are in fractions of figure width and height
     ax = fig.add_axes([0, 0, plot_size, plot_size], polar=True)
 
