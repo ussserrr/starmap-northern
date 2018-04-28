@@ -1,0 +1,6 @@
+matplotlib==2.0.0
+BeautifulSoup4
+astropy
+ephem
+pyorbital
+geopy
