@@ -6,6 +6,7 @@
 # TODO: case when not all stars were downloaded
 # TODO: implement constellations as graphs
 # TODO: animate
+# TODO: feature to set observation time manually
 # TODO: ask for lateset matplotlib fix
 
 

@@ -244,16 +244,23 @@ def plot_fov(ax, obs_time, obs_loc, fontsize=10):
     ax.fill_between(shared_ax, fov_circle, external_circle, where=external_circle>=fov_circle, facecolor=colors['fov_outer'], alpha=0.25)
 
     #
-    # putting on plot ticks of circle axis (axis of azimuth) in the same way as circle itself
+    # putting on plot ticks of circle axis (axis of azimuth) in the same way as outer circle
     #
     fov_ticks_az = np.arange(0, 345+0.1, 15)
     fov_ticks_alt = np.zeros(len(fov_ticks_az))
     fov_ticks = SkyCoord(fov_ticks_az, fov_ticks_alt, unit='deg', frame='altaz', obstime=obs_time, location=obs_loc)
     fov_ticks = fov_ticks.transform_to('icrs')
+    cardinal_directions = ['N', 'W', 'S', 'E']
+    cnt = 0
     for (tick_coord, label) in zip(fov_ticks, fov_ticks_az):
         ax.plot( [tick_coord.ra.radian], [-tick_coord.dec.value+45], '.', color=colors['fov_outer'] )
-        ax.text( tick_coord.ra.radian, -tick_coord.dec.value+45,
-                 "{}°".format(int(label)), fontsize=fontsize )
+        if int(label) % 90 == 0:
+            ax.text( tick_coord.ra.radian, -tick_coord.dec.value+45,
+                     cardinal_directions[cnt], fontsize=fontsize*2, fontname="Apple Chancery", fontweight='bold' )
+            cnt += 1
+        else:
+            ax.text( tick_coord.ra.radian, -tick_coord.dec.value+45,
+                     "{}°".format(int(label)), fontsize=fontsize )
 
     #
     # plot straight axis - from South to North - of field of view circle (similarly)
