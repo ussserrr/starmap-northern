@@ -14,12 +14,15 @@ from collections import OrderedDict
 
 
 
-fonts = { 'skymap': 10,
+#
+# settings section
+#
+fonts = { 'skymap': 10,  # fonts sizes
           'const_name': 10,
           'fov': 10,
           'legend': 14,
           'title': 48 }
-markers = { 'moon': 50,
+markers = { 'moon': 50,  # markers sizes
             'sun': 50,
             'iss': 20,
             'planet': 20 }
@@ -82,8 +85,11 @@ def download_stars(constellations_dict):
 
 def extract_constellations(stars):
     """
-    Extract individual constellations from one table and put them into separate
-    tables stored in list (sorted by constellation' names)
+    Extract individual constellations from a one table and put them into separate
+    tables stored in a list (sorted by constellations' names)
+
+    returns:
+        list with constellations' astropy.Table tables
     """
 
     constellations = []
@@ -104,10 +110,12 @@ def extract_constellations(stars):
 
 def extract_forms(constellations_dict, stars_table):
     """
-    define indexes of stars in database table that corresponds to stars in constellations' forms
+    Define indexes of stars in the database table that corresponds to stars in constellations' forms
 
-    return:
-        Table with
+    returns:
+        astropy.Table with 3 columns: constellation name,
+                                      path (with stars' letters) (for human-reading),
+                                      path (with stars' indexes) (for machine-reading)
     """
 
     constellations_forms = astropy.table.Table( names=['constellation', 'path', 'idxs'],
@@ -122,6 +130,7 @@ def extract_forms(constellations_dict, stars_table):
         path_for_table = ''
         for elem in path:
             path_for_table = path_for_table + elem + ' '
+
         constellations_forms.add_row([name, path_for_table, idxs])
 
     return constellations_forms
@@ -129,11 +138,17 @@ def extract_forms(constellations_dict, stars_table):
 
 
 def prepare_skymap(fontsize=10):
+    """
+    Form outer circle for ICRS coordinate system
 
-    fig = plt.figure(dpi=dpi)  # figsize=(14, 7)
+    returns:
+        matplotlib Figure and Axes instances
+    """
 
-    # add an axes at position [left, bottom, width, height] where all quantities are
-    # in fractions of figure width and height
+    fig = plt.figure(dpi=dpi)
+
+    # docs quote: add an axes at position [left, bottom, width, height] where
+    # all quantities are in fractions of figure width and height
     ax = fig.add_axes([0, 0, plot_size, plot_size], polar=True)
 
     ax.set_theta_zero_location('N')
