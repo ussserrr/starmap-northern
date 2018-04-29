@@ -6,7 +6,6 @@
 # TODO: case when not all stars were downloaded
 # TODO: implement constellations as graphs
 # TODO: animate
-# TODO: feature to set observation time manually
 # TODO: ask for lateset matplotlib fix
 
 
@@ -21,14 +20,31 @@ from astropy.coordinates import EarthLocation
 import astropy.units as u
 import astropy.table
 
-from datetime import datetime
+from datetime import datetime, timedelta
 import time
 
-from util import extract_forms, extract_constellations, prepare_skymap, plot_fov, plot_moon, plot_sun, plot_solarsystem, plot_iss, fonts, plot_size
+from util import extract_forms, extract_constellations, prepare_skymap, plot_fov, plot_moon,\
+                 plot_sun, plot_solarsystem, plot_iss, fonts, plot_size
 from dl_constellations import constellations as constellations_dict
 
 
+location_str = "Syktyvkar"
 internet_geolocation = 1
+if not internet_geolocation:
+    class Loc:
+        """
+        Hard-coded location. You can use it instead of Internet geolocationing
+        """
+        latitude = 61.40
+        longitude = 50.49
+        altitude = 100
+        address = location_str
+
+
+# datetime(year, month, day, hours, minutes, seconds, ms) or 0
+custom_time = None  # datetime(2018, 4, 29, 0, 38, 42, 00000)
+
+
 tle_type = { 'internet': 1,
              'internet_by_url': 0,
              'local': 0 }
@@ -73,26 +89,17 @@ for constellation,constellation_form in zip(constellations,constellations_forms[
              fontsize=fonts['const_name'], weight='bold' )
 
     print("\r{} plotted".format(constellation['Constellation'][0]).ljust(80), end='')
-print('\r'.ljust(80)+'\r', end='')
+print('\rconstellations are plotted'.ljust(80))
 
 
-location_str = "Syktyvkar"
 location = None
 
 if internet_geolocation:
     # request geolocation by string
-    print("request geolocation by geopy...")
+    print("request geolocation via geopy...")
     from geopy.geocoders import Nominatim as geocoder
     location = geocoder().geocode(location_str, timeout=5)
 else:
-    class Loc:
-        """
-        Hard-coded location. You can use it instead of Internet geolocationing
-        """
-        latitude = 61.40
-        longitude = 50.49
-        altitude = 100
-        address = location_str
     location = Loc()
 
 if location is not None:
@@ -106,8 +113,18 @@ else:
 
 
 # Moscow time: 3*u.hour (or datetime.now()-datetime.utcnow())
-utc_offset = ((time.timezone if (time.localtime().tm_isdst==0) else time.altzone)/60/60*-1) * u.hour
-obs_time = astropy.time.Time(datetime.utcnow())
+utc_offset = (time.timezone if (time.localtime().tm_isdst==0) else time.altzone)/60/60*-1
+obs_time = None
+if custom_time:
+    from math import modf
+    obs_time = astropy.time.Time( custom_time - timedelta( hours=modf(utc_offset)[1],
+                                                           minutes=modf(utc_offset)[0] ) )
+else:
+    obs_time = astropy.time.Time( datetime.utcnow() )
+
+if not obs_time:
+    print("NO TIME")
+    sys.exit()
 
 
 # plot current field-of-view, planets, Moon, Sun and ISS
@@ -136,7 +153,8 @@ fig.suptitle( "Star map of the\nnorthern semisphere",
 
 fig.text( plot_size+(plot_size/7), (plot_size/2)-0.025,
           "{0}, ( {1:.2f}, {2:.2f} )\n\
-           {3}\n".format(location_str, obs_loc.lat, obs_loc.lon, str(obs_time+utc_offset)[:-7]),
+           {3}\n".format( location_str, obs_loc.lat, obs_loc.lon,
+                          str(obs_time + (utc_offset*u.hour)) ),
           fontsize=20, fontname="Andale Mono",
           horizontalalignment='center', verticalalignment='center' )
 

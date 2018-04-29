@@ -1,8 +1,12 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+
 from collections import OrderedDict
 
 from util import download_stars, extract_forms
 
-#greek_alphabet = "αβγδεζηθικλμνξοπρστυφχψω"  # just for copying letters
+# greek_alphabet = "αβγδεζηθικλμνξοπρστυφχψω"  # just for copying letters
 
 
 # entry point (input data): dict with
