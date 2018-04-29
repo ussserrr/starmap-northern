@@ -152,7 +152,7 @@ def prepare_skymap(fontsize=10):
     ax = fig.add_axes([0, 0, plot_size, plot_size], polar=True)
 
     ax.set_theta_zero_location('N')
-    ax.set_theta_direction(-1)
+    ax.set_theta_direction(-1)  # anti-clockwise
 
     ax.set_rlim(90, -45)  # same as set_ylim()
     ax.set_yticks(np.arange(-45, 90+0.1, 15))
@@ -182,6 +182,10 @@ def prepare_skymap(fontsize=10):
 
 
 def plot_moon(ax, obs_time, obs_loc):
+    """
+    Put Moon on a given Axes instance
+    """
+
     moon = get_moon(obs_time, location=obs_loc)
     moon = SkyCoord(moon.ra, moon.dec, frame='gcrs').transform_to('icrs')
 
@@ -193,6 +197,10 @@ def plot_moon(ax, obs_time, obs_loc):
 
 
 def plot_sun(ax, obs_time):
+    """
+    Put Sun on a given Axes instance
+    """
+
     sun = get_sun(obs_time)
     sun = SkyCoord(sun.ra, sun.dec, frame='gcrs').transform_to('icrs')
 
@@ -204,6 +212,11 @@ def plot_sun(ax, obs_time):
 
 
 def plot_iss(ax, obs_time, obs_loc, tle=None):
+    """
+    Put International Space Station on the plot. The function uses TLE list if
+    it was given or tries to retrieve it via PyOrbital package
+    """
+
     if tle is None:
         from pyorbital.orbital import Orbital
         print("request ISS' two-line elements via PyOrbital...")
@@ -235,6 +248,12 @@ def plot_iss(ax, obs_time, obs_loc, tle=None):
 
 
 def plot_solarsystem(ax, obs_time, obs_loc):
+    """
+    Put planets of Solar System on a given Axes instance. Designation of each planet
+    is its roman symbol
+    """
+
+    # for Uranus must be another symbol, but at Unicode U+2645, which renders as ♅ (Wiki)
     planets = OrderedDict([ ('Mercury', '☿'),
                             ('Venus', '♀'),
                             ('Mars', '♂'),
@@ -256,10 +275,10 @@ def plot_solarsystem(ax, obs_time, obs_loc):
 
 def plot_fov(ax, obs_time, obs_loc, fontsize=10):
     """
-    plot current field of view (circle)
+    Plot current field-of-view (FOV)
     """
 
-    # coordinates of field-of-view-circle' points in (alt,az)
+    # coordinates of field-of-view-circle' points in (alt,az) frame
     fov_az = np.arange(0, 360+0.1, 1)
     fov_alt = np.zeros(len(fov_az))
     fov = SkyCoord(fov_az, fov_alt, unit='deg', frame='altaz', obstime=obs_time, location=obs_loc)
@@ -271,8 +290,8 @@ def plot_fov(ax, obs_time, obs_loc, fontsize=10):
     # fill the area that we cannot observe now
     shared_ax = fov.ra.radian
     fov_circle = -fov.dec.value+45
-    external_circle = (len(fov_circle)*[-(-45)+45])
-    ax.fill_between( shared_ax, fov_circle, external_circle, where=external_circle>=fov_circle,
+    outer_circle = len(fov_circle) * [-(-45)+45]
+    ax.fill_between( shared_ax, fov_circle, outer_circle, where=outer_circle>=fov_circle,
                      facecolor=colors['fov_outer'], alpha=0.25 )
 
     #

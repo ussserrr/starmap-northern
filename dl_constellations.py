@@ -10,9 +10,9 @@ from util import download_stars, extract_forms
 
 
 # entry point (input data): dict with
-#        keys: constellations' 3-letter code and
-#        values: their forms as string of greek letters (stars of this constellation)
-#                in concrete order to render each constellation
+#     keys: constellations' 3-letter code and
+#     values: their forms as string of greek letters (stars of this constellation)
+#             in concrete order to render each constellation
 # sort dict by names of constellations to be sure that two tables corresponds to each other
 constellations = OrderedDict(sorted(
     { 'UMa': ['η','ζ','ε','δ','γ','β','α','δ'],
