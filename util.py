@@ -146,6 +146,7 @@ def prepare_skymap(fontsize=10):
     """
 
     fig = plt.figure(dpi=dpi)
+    fig.canvas.set_window_title('starmap-northern')
 
     # docs quote: add an axes at position [left, bottom, width, height] where
     # all quantities are in fractions of figure width and height
