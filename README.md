@@ -1,6 +1,8 @@
 # starmap-northern
 ![cover](/cover.png)
 
+To see animated version please go to [starmap-northern-animation](https://github.com/ussserrr/starmap-northern-animation).
+
 
 ## Overview and features
 Star map of the northern hemisphere made with Python packages for astronomy: astropy, ephem, pyorbital. It uses matplotlib to render the graphics. Constellations (more accurately, asterisms) and their stars to plot are determined by a user and defined as Python dictionary object. Then, the dedicated script automatically download necessary data (stars coordinates) (SIMBAD database).

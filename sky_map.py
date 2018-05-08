@@ -6,7 +6,6 @@
 # TODO: map where only FOV and center is a current 'polar star' analogue (zenith)
 # TODO: case when not all stars were downloaded
 # TODO: implement constellations as graphs
-# TODO: animate
 # TODO: ask for lateset matplotlib fix
 
 
