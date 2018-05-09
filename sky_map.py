@@ -6,7 +6,8 @@
 # TODO: map where only FOV and center is a current 'polar star' analogue (zenith)
 # TODO: case when not all stars were downloaded
 # TODO: implement constellations as graphs
-# TODO: ask for lateset matplotlib fix
+# TODO: implement map as custom axes projection (see
+#       https://matplotlib.org/gallery/misc/custom_projection.html#sphx-glr-gallery-misc-custom-projection-py)
 
 
 import sys, os

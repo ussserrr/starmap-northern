@@ -25,7 +25,7 @@ to install them.
   - astropy: SIMBAD queries, main coordinates transformations, database file storage
   - ephem (pyephem): TLE processing
   - pyorbital: TLE querying and processing
-  - matplotlib: currently only 2.0.0 version is supported
+  - matplotlib: graphics
   - geopy: retrieve geolocation by a string from the Internet
   - BeautifulSoup4: HTML files handling (used internal by astropy)
 

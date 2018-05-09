@@ -155,7 +155,7 @@ def prepare_skymap(fontsize=10):
     ax.set_theta_zero_location('N')
     ax.set_theta_direction(-1)  # anti-clockwise
 
-    ax.set_rlim(90, -45)  # same as set_ylim()
+    ax.set_ylim(-45, 90)
     ax.set_yticks(np.arange(-45, 90+0.1, 15))
     ax.set_yticklabels(ax.get_yticks()[::-1])  # reverse axis
 
@@ -169,6 +169,8 @@ def prepare_skymap(fontsize=10):
         yticklabel.set_fontsize(fontsize)
     for xticklabel in ax.get_xticklabels():
         xticklabel.set_fontsize(1.75*fontsize)
+
+    ax.tick_params(axis='x', which='major', pad=20)
 
     ax.get_yticklabels()[0].set_visible(False)
     ax.get_yticklabels()[-1].set_visible(False)
